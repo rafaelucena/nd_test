@@ -1,0 +1,5 @@
+/var*
+/vendor*
+/docker*
+symfony.lock
+.env.*
