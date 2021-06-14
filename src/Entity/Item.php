@@ -2,8 +2,7 @@
 
 namespace App\Entity;
 
-use DateTime;
-use DateTimeInterface;
+use App\Entity\Traits\TimestampsTrait;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ItemRepository;
 
@@ -13,6 +12,8 @@ use App\Repository\ItemRepository;
  */
 class Item
 {
+    use TimestampsTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -24,16 +25,6 @@ class Item
      * @ORM\Column(type="text")
      */
     private $data;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="items")
@@ -70,46 +61,6 @@ class Item
     }
 
     /**
-     * @return DateTimeInterface
-     */
-    public function getCreatedAt(): ?DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param DateTimeInterface $createdAt
-     *
-     * @return self
-     */
-    public function setCreatedAt(DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @return DateTimeInterface
-     */
-    public function getUpdatedAt(): ?DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @param DateTimeInterface $updatedAt
-     *
-     * @return self
-     */
-    public function setUpdatedAt(DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
      * @return User|null
      */
     public function getUser(): ?User
@@ -127,35 +78,5 @@ class Item
         $this->user = $user;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     *
-     * @return void
-     */
-    public function updateTimestampsOnPersist(): void
-    {
-        if (null === $this->getUpdatedAt()) {
-            $this->setUpdatedAt(new DateTime('now'));
-        }
-
-        if (null === $this->getCreatedAt()) {
-            $this->setCreatedAt(new DateTime('now'));
-        }
-    }
-
-    /**
-     * @ORM\PreUpdate
-     *
-     * @return void
-     */
-    public function updatedTimestampsOnUpdate(): void
-    {
-        $this->setUpdatedAt(new DateTime('now'));
-
-        if (null === $this->getCreatedAt()) {
-            $this->setCreatedAt(new DateTime('now'));
-        }
     }
 }
