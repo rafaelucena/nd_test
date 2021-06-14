@@ -48,21 +48,35 @@ class User implements UserInterface
      */
     private $items;
 
+    /**
+     * @return void
+     */
     public function __construct()
     {
         $this->items = new ArrayCollection();
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getUsername(): ?string
     {
         return $this->username;
     }
 
+    /**
+     * @param string $username
+     *
+     * @return self
+     */
     public function setUsername(string $username): self
     {
         $this->username = $username;
@@ -70,11 +84,39 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @param string $password
+     *
+     * @return self
+     */
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * @return DateTimeInterface
+     */
     public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->createdAt;
     }
 
+    /**
+     * @param DateTimeInterface $createdAt
+     *
+     * @return self
+     */
     public function setCreatedAt(DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
@@ -82,11 +124,19 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return DateTimeInterface
+     */
     public function getUpdatedAt(): ?DateTimeInterface
     {
         return $this->updatedAt;
     }
 
+    /**
+     * @param DateTimeInterface $updatedAt
+     *
+     * @return self
+     */
     public function setUpdatedAt(DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
@@ -95,7 +145,32 @@ class User implements UserInterface
     }
 
     /**
+     * @return Collection|Item[]
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
+    }
+
+    /**
+     * @param Item $item
+     *
+     * @return self
+     */
+    public function addItem(Item $item): self
+    {
+        if (!$this->items->contains($item)) {
+            $this->items[] = $item;
+            $item->setUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
      * @ORM\PrePersist
+     *
+     * @return void
      */
     public function updateTimestampsOnPersist(): void
     {
@@ -110,6 +185,8 @@ class User implements UserInterface
 
     /**
      * @ORM\PreUpdate
+     *
+     * @return void
      */
     public function updatedTimestampsOnUpdate(): void
     {
@@ -120,47 +197,26 @@ class User implements UserInterface
         }
     }
 
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
+    /**
+     * @return array
+     */
     public function getRoles(): array
     {
         return ['ROLE_USER'];
     }
 
+    /**
+     * @return void
+     */
     public function eraseCredentials(): void
     {
     }
 
+    /**
+     * @return string|null
+     */
     public function getSalt(): ?string
     {
         return null;
-    }
-
-    /**
-     * @return Collection|Item[]
-     */
-    public function getItems(): Collection
-    {
-        return $this->items;
-    }
-
-    public function addItem(Item $item): self
-    {
-        if (!$this->items->contains($item)) {
-            $this->items[] = $item;
-            $item->setUser($this);
-        }
-
-        return $this;
     }
 }
