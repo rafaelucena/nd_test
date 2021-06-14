@@ -53,6 +53,35 @@ class ItemController extends AbstractController
     }
 
     /**
+     * @Route("/item", name="items_update", methods={"PUT"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function update()
+    {
+        $id = put_request('id');
+        if (empty($id)) {
+            return $this->json(['error' => 'No id parameter'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $data = put_request('data');
+        if (empty($data)) {
+            return $this->json(['error' => 'No data parameter'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $item = $this->getDoctrine()->getRepository(Item::class)->find($id);
+        if ($item === null) {
+            return $this->json(['error' => 'No item'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $item->setData($data);
+
+        $manager = $this->getDoctrine()->getManager();
+        $manager->flush();
+
+        return $this->json([]);
+    }
+
+    /**
      * @Route("/item/{id}", name="items_delete", methods={"DELETE"})
      * @IsGranted("ROLE_USER")
      */
