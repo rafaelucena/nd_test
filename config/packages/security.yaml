@@ -20,3 +20,6 @@ security:
     encoders:
         App\Entity\User:
             algorithm: bcrypt
+            cost: 18
+            memory_cost: 16384
+            time_cost: 3
