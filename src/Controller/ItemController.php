@@ -43,6 +43,34 @@ class ItemController extends AbstractController
     }
 
     /**
+     * @Route("/item/{id}", name="items_show", methods={"GET"})
+     * @IsGranted("ROLE_USER")
+     *
+     * @param int $id
+     *
+     * @return JsonResponse
+     */
+    public function show(int $id): JsonResponse
+    {
+        if (empty($id)) {
+            return $this->json(['error' => 'No data parameter'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $item = $this->getDoctrine()->getRepository(Item::class)->find($id);
+
+        if ($item === null) {
+            return $this->json(['error' => 'No item'], Response::HTTP_BAD_REQUEST);
+        }
+
+        return new JsonResponse([
+            'id' => $item->getId(),
+            'data' => $item->getData(),
+            'created_at' => $item->getCreatedAt(),
+            'updated_at' => $item->getUpdatedAt(),
+        ]);
+    }
+
+    /**
      * @Route("/item", name="item_create", methods={"POST"})
      * @IsGranted("ROLE_USER")
      *
