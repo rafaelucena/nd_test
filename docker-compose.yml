@@ -27,3 +27,14 @@ services:
             MYSQL_DB_NAME: ${MYSQL_DB_NAME}
             MYSQL_TCP_PORT: 3366
         container_name: securestorage_mysql
+
+    redis:
+        image: "redis:alpine"
+        image: redis
+        ports:
+            - 127.0.0.1:${REDIS_PORT}:6379
+        volumes:
+            - ./docker/redis:/data
+        entrypoint:
+            redis-server --appendonly yes
+        container_name: securestorage_redis
