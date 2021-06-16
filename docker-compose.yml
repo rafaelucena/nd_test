@@ -21,8 +21,9 @@ services:
         volumes:
             - ./docker/mysql/data:/var/lib/mysql
         ports:
-            - 127.0.0.1:${MYSQL_PORT}:3306
+            - 127.0.0.1:${MYSQL_PORT}:3366
         environment:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
             MYSQL_DB_NAME: ${MYSQL_DB_NAME}
+            MYSQL_TCP_PORT: 3366
         container_name: securestorage_mysql
