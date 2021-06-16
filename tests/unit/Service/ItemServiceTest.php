@@ -25,7 +25,7 @@ class ItemServiceTest extends TestCase
     {
         /** @var EntityManagerInterface */
         $this->entityManager = $this->createMock(EntityManagerInterface::class);
-        
+
         $this->itemService = new ItemService($this->entityManager);
     }
 
@@ -37,6 +37,7 @@ class ItemServiceTest extends TestCase
 
         $expectedObject = new Item();
         $expectedObject->setUser($user);
+        $expectedObject->setData($data);
 
         $this->entityManager->expects($this->once())->method('persist')->with($expectedObject);
 
